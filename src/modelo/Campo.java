@@ -2,6 +2,7 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 public class Campo {
 
@@ -13,10 +14,21 @@ public class Campo {
 	private boolean marcado = false;
 
 	private List<Campo> vizinhos = new ArrayList<>();
+	private List<CampoObservador> observadores = new ArrayList<>();
+	// private List<BiConsumer<Campo, CampoEvento>> observadores2 = new
+	// ArrayList<>();
 
 	Campo(int linha, int coluna) {
 		this.linha = linha;
 		this.coluna = coluna;
+	}
+
+	public void registrarObservador(CampoObservador observador) {
+		observadores.add(observador);
+	}
+
+	private void notificarObservadores(CampoEvento evento) {
+		observadores.stream().forEach(o -> o.eventoOcorreu(this, evento));
 	}
 
 	boolean adicionarVisinho(Campo vizinho) {
@@ -42,17 +54,21 @@ public class Campo {
 	void alternarMarcacao() {
 		if (!this.aberto) {
 			this.marcado = !marcado;
+			if (this.marcado) {
+				notificarObservadores(CampoEvento.MARCAR);
+			} else {
+				notificarObservadores(CampoEvento.DESMARCAR);
+			}
 		}
 	}
 
 	boolean abrir() {
 		if (!this.aberto && !this.marcado) {
-			this.aberto = true;
-
 			if (this.minado) {
-				// TODO Implementar nova versão
-				// FIXME Erro
+				notificarObservadores(CampoEvento.EXPLODIR);
+				return true;
 			}
+			setAberto(true);
 			if (viziancaSegura()) {
 				vizinhos.forEach(v -> v.abrir());
 			}
@@ -80,6 +96,9 @@ public class Campo {
 
 	void setAberto(boolean aberto) {
 		this.aberto = aberto;
+		if (this.aberto) {
+			notificarObservadores(CampoEvento.ABRIR);
+		}
 	}
 
 	public boolean isAberto() {
