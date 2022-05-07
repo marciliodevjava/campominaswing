@@ -60,7 +60,29 @@ public class BotaoCampo extends JButton implements CampoObservador, MouseListene
 	}
 
 	private void aplicarEstiloAbrir() {
+		setBackground(BG_PADRAO);
+		setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
+		switch (campo.minasNaVizianca()) {
+		case 1:
+			setForeground(TEXTO_VERDE);
+			break;
+		case 2:
+			setForeground(Color.BLUE);
+			break;
+		case 3:
+			setForeground(Color.YELLOW);
+			break;
+		case 4:
+		case 5:
+		case 6:
+			setForeground(Color.RED);
+			break;
+		default:
+			setForeground(Color.PINK);
+		}
+		String valor = !campo.viziancaSegura() ? campo.minasNaVizianca() + "" : "";		
+		setText(valor);
 	}
 
 	@Override
@@ -73,15 +95,24 @@ public class BotaoCampo extends JButton implements CampoObservador, MouseListene
 
 	@Override
 	public void mousePressed(java.awt.event.MouseEvent e) {
-		if(e.getButton() == 1) {
-			System.out.println("Botão esquerdo!");
+		if (e.getButton() == 1) {
+			campo.abrir();
+			System.out.println("Botão esquerdo: Abrir");
 		} else {
-			System.out.println("Outro botão!");
+			campo.alternarMarcacao();
+			System.out.println("Botão direito: Alterna Marcação");
 		}
 	}
 
-	public void mouseClicked(MouseEvent e) {}	
-	public void mouseEntered(java.awt.event.MouseEvent e) {}
-	public void mouseExited(java.awt.event.MouseEvent e) {}
-	public void mouseReleased(java.awt.event.MouseEvent e) {}
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	public void mouseEntered(java.awt.event.MouseEvent e) {
+	}
+
+	public void mouseExited(java.awt.event.MouseEvent e) {
+	}
+
+	public void mouseReleased(java.awt.event.MouseEvent e) {
+	}
 }
