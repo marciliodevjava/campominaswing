@@ -5,6 +5,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.SwingUtilities;
 
 import org.w3c.dom.events.MouseEvent;
 
@@ -24,6 +25,7 @@ public class BotaoCampo extends JButton implements CampoObservador, MouseListene
 	public BotaoCampo(Campo campo) {
 		this.campo = campo;
 		setBackground(BG_PADRAO);
+		setOpaque(true);
 		setBorder(BorderFactory.createBevelBorder(0));
 
 		addMouseListener(this);
@@ -45,23 +47,40 @@ public class BotaoCampo extends JButton implements CampoObservador, MouseListene
 		default:
 			aplicarEstiloPadrao();
 		}
+		SwingUtilities.invokeLater(() -> {
+			repaint();
+			validate();
+		});
 	}
 
 	private void aplicarEstiloPadrao() {
-
+		setBackground(BG_PADRAO);
+		setBorder(BorderFactory.createBevelBorder(0));
+		setText("");
 	}
 
 	private void aplicarEstiloExplodir() {
-
+		setBackground(BG_EXPLODIR);
+		setForeground(Color.WHITE);
+		setText("X");
 	}
 
 	private void aplicarEstiloMarcar() {
-
+		setBackground(BG_MARCAR);
+		setForeground(Color.BLACK);
+		setText("M");
 	}
 
 	private void aplicarEstiloAbrir() {
-		setBackground(BG_PADRAO);
+
 		setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+		if (campo.isMinado()) {
+			setBackground(BG_EXPLODIR);
+			return;
+		}
+
+		setBackground(BG_PADRAO);
 
 		switch (campo.minasNaVizianca()) {
 		case 1:
@@ -81,7 +100,7 @@ public class BotaoCampo extends JButton implements CampoObservador, MouseListene
 		default:
 			setForeground(Color.PINK);
 		}
-		String valor = !campo.viziancaSegura() ? campo.minasNaVizianca() + "" : "";		
+		String valor = !campo.viziancaSegura() ? campo.minasNaVizianca() + "" : "";
 		setText(valor);
 	}
 
