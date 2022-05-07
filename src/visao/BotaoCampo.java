@@ -87,7 +87,6 @@ public class BotaoCampo extends JButton implements CampoObservador, MouseListene
 
 	@Override
 	public void mouseClicked(java.awt.event.MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
