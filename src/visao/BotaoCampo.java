@@ -1,16 +1,19 @@
 package visao;
 
 import java.awt.Color;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+
+import org.w3c.dom.events.MouseEvent;
 
 import modelo.Campo;
 import modelo.CampoEvento;
 import modelo.CampoObservador;
 
 @SuppressWarnings("serial")
-public class BotaoCampo extends JButton implements CampoObservador {
+public class BotaoCampo extends JButton implements CampoObservador, MouseListener {
 
 	private final Color BG_PADRAO = new Color(184, 184, 184);
 	private final Color BG_MARCAR = new Color(8, 179, 247);
@@ -22,7 +25,8 @@ public class BotaoCampo extends JButton implements CampoObservador {
 		this.campo = campo;
 		setBackground(BG_PADRAO);
 		setBorder(BorderFactory.createBevelBorder(0));
-		
+
+		addMouseListener(this);
 		campo.registrarObservador(this);
 	}
 
@@ -58,4 +62,26 @@ public class BotaoCampo extends JButton implements CampoObservador {
 	private void aplicarEstiloAbrir() {
 
 	}
+
+	@Override
+	public void mouseClicked(java.awt.event.MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	// Inteface dos Eventos do Mause.
+
+	@Override
+	public void mousePressed(java.awt.event.MouseEvent e) {
+		if(e.getButton() == 1) {
+			System.out.println("Botão esquerdo!");
+		} else {
+			System.out.println("Outro botão!");
+		}
+	}
+
+	public void mouseClicked(MouseEvent e) {}	
+	public void mouseEntered(java.awt.event.MouseEvent e) {}
+	public void mouseExited(java.awt.event.MouseEvent e) {}
+	public void mouseReleased(java.awt.event.MouseEvent e) {}
 }
